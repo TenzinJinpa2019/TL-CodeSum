@@ -82,7 +82,7 @@ def multi_encoder(encoder_inputs, encoders, encoder_input_length, other_inputs=N
         else:
             initializer = None
 
-        device = '/cpu:0' if encoder.embeddings_on_cpu else None
+        device = '/gpu:0' if encoder.embeddings_on_cpu else None
         with tf.device(device):  # embeddings can take a very large amount of memory, so
             # storing them in GPU memory can be impractical
             embedding = get_variable('embedding_{}'.format(encoder.name), shape=embedding_shape,
@@ -499,7 +499,7 @@ def attention_decoder(decoder_inputs, initial_state, attention_states, encoders,
     else:
         initializer = None
 
-    device = '/cpu:0' if decoder.embeddings_on_cpu else None
+    device = '/gpu:0' if decoder.embeddings_on_gpu else None
     with tf.device(device):
         embedding = get_variable('embedding_{}'.format(decoder.name), shape=embedding_shape, initializer=initializer)
 

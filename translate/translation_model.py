@@ -331,8 +331,12 @@ class TranslationModel:
 
                 hypothesis_iter = self.decode_batch(lines, self.batch_size, remove_unk=remove_unk,
                                                     fix_edits=fix_edits)
-                #ref_file_path = '../data/valid/ref.out'
-                #ref_file = open(ref_file_path, 'w')
+                ref_file_path = '../data/valid/ref.out'
+                ref_file = open(ref_file_path, 'w')
+                hypo_file_path = '../data/valid/hyp.out'
+                hypo_file = open(hypo_file_path, 'w')
+                 
+
 
                 for i, (sources, hypothesis, reference) in enumerate(zip(src_sentences, hypothesis_iter,
                                                                          trg_sentences)):
@@ -344,7 +348,7 @@ class TranslationModel:
                     hypothesis, raw = hypothesis
 
                     hypotheses.append(hypothesis)
-                    reference = reference.strip().split('\t')[1]
+                    reference = reference.strip().split('\t')[0]
                     references.append(reference)
                     if output_file is not None:
                         if raw_output:
@@ -352,12 +356,15 @@ class TranslationModel:
 
                         output_file.write(hypothesis + '\n')
                         output_file.flush()
-                    #ref_file.write(reference + '\n')
+                    ref_file.write(reference + '\n')
+                    hypo_file.write(hypothesis + '\n')
+                    hypo_file.flush()
 
             finally:
                 if output_file is not None:
                     output_file.close()
-                    #ref_file.close()
+                    ref_file.close()
+                    hypo_file.close()
 
             if post_process_script is not None:
                 data = '\n'.join(hypotheses).encode()
